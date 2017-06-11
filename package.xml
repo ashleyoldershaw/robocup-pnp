@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<package>
+  <name>robocupathome_pnp</name>
+  <version>0.0.0</version>
+  <description>RoboCup@Home PNP node</description>
+  
+  <maintainer email="iocchi@dis.uniroma1.it">Luca Iocchi</maintainer>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>actionlib</build_depend>
+  <build_depend>move_base_msgs</build_depend>
+  <build_depend>nav_msgs</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>tf</build_depend>
+  <build_depend>pnp_ros</build_depend>
+  <build_depend>pnp_msgs</build_depend>
+  <run_depend>message_runtime</run_depend>
+  <run_depend>actionlib</run_depend>
+  <run_depend>move_base_msgs</run_depend>
+  <run_depend>nav_msgs</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>tf</run_depend>
+  <run_depend>pnp_ros</run_depend>
+  <run_depend>pnp_msgs</run_depend>
+
+
+  <!-- The export tag contains other, unspecified, tags -->
+  <export>
+
+  </export>
+</package>
+

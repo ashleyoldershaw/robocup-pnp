@@ -1,0 +1,13 @@
+goto_maindoor;
+enter_maindoor;
+goto_Room1;
+lookfor_person;
+sense_persondetected;
+< persondetected? approachperson:
+  (not persondetected)? say_comehere >;
+waitfor_personhere;
+ask_whichdrink;
+answer_drink_@X
+serve_drink_@X;
+
+
