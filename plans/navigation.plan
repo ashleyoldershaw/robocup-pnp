@@ -1,0 +1,12 @@
+goto_entrance;
+goto_kitchen;
+goto_corridor2U;
+goto_bedroomin;
+goto_bedroomout;
+goto_technicalroom;
+goto_livingroom;
+goto_fridge;
+goto_exit;
+restart;
+
+
