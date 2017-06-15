@@ -102,6 +102,7 @@ public:
     void approach(string params, bool *run);
     void ask(string params, bool *run);
 	void answer(string params, bool *run);
+	void grab(string params, bool *run);
     void followperson(string params, bool *run);
 
 

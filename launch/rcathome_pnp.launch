@@ -26,6 +26,31 @@
         <param name="config_file" value="$(find tcp_interface)/config/UDPpeers.cfg"/>    
     </node>
 
+    <!-- CONDITIONS -->
+
+    <!-- provide data for persondetected and personhere conditions -->
+    <node pkg="laser_analysis" name="laserobstacle" type="laserobstacle" args=""  output="screen">
+	    <param name="laser_frame_id" value="/$(arg robot_name)/laser_frame" />
+	    <param name="map_distance" value="0.5" />
+        <param name="obstacle_margin_x_min" value="0" />
+        <param name="obstacle_margin_x_max" value="6" />
+        <param name="obstacle_margin_y_min" value="-1" />
+        <param name="obstacle_margin_y_max" value="1" />
+    </node>
+
+    <!-- ACTIONS -->
+
+    <node pkg="rococo_navigation" name="turn" type="turn_node" args="-server $(arg robot_name)"  output="screen">
+	</node>
+
+    <node pkg="rococo_navigation" name="follow_corridor" type="follow_corridor_node" args="-server $(arg robot_name)"  output="screen">
+	</node>
+
+	  
+	<node pkg="rococo_navigation" name="follow_person" type="follow_person_node" args="-server $(arg robot_name)"  output="screen">
+	</node>
+
+
 </group><!-- ns -->
 
 </launch>

@@ -23,7 +23,7 @@ void RCHPNPActionServer::initLocations() {
 	locationcoords["corridor2U"].set(8.0, 17.5);
 	locationcoords["bedroomin"].set(3.0, 18.0);
 	locationcoords["bedroomout"].set(5.7, 17.5);
-	locationcoords["livingroom"].set(3.5, 3.5);
+	locationcoords["livingroom"].set(4.5, 3.5);
 	locationcoords["hall"].set(8.3, 7.0);
 	locationcoords["technicalroom"].set(3.0, 9.0);
 	locationcoords["kitchen"].set(8.0, 11.0);
@@ -153,13 +153,22 @@ void RCHPNPActionServer::answer(string params, bool *run) {
 
     cout << "### Executing Answer " << params << " ... " << endl;
 
-    waitfor("HRIreceived",run);
+    waitfor(params,run);
 
     cout << "### Answer " << params << ((*run)?" Completed":" Aborted") << endl;
 
 }
 
 
+void RCHPNPActionServer::grab(string params, bool *run) {
+
+    cout << "### Executing Grab " << params << " ... " << endl;
+
+    ros::Duration(3.0).sleep();
+
+    cout << "### Grab " << params << ((*run)?" Completed":" Aborted") << endl;
+
+}
 
 
 
@@ -191,7 +200,9 @@ void RCHPNPActionServer::lookfor(string params, bool *run) {
 
     cout << "### Executing Lookfor " << params << " ... " << endl;
 
-    waitfor("HRIreceived",run);
+    do_turn("ABS", 135, run);  ros::Duration(1.0).sleep();
+    do_turn("ABS", 215, run); ros::Duration(1.0).sleep();
+    do_turn("ABS", 180, run); ros::Duration(1.0).sleep();
 
     cout << "### Lookfor " << params << ((*run)?" Completed":" Aborted") << endl;
 

@@ -17,7 +17,7 @@ void RCHPNPActionServer::laserobsmapCallback(laser_analysis::LaserObstacleMap ms
     handle.param<int>("/"+robotname+"/PNPconditions/params/laser_obstacle_min_points", min_points, 2);
     handle.param<double>("/"+robotname+"/PNPconditions/params/laser_obstacle_max_dist", max_dist, 2.0);
 
-    // cout << "Laser obstacle params: " <<  min_points << " " << max_dist << endl;
+    // cout << "Laser obstacle params: min_point: " <<  min_points << " max_dist: " << max_dist << endl;
 
     bool r = (msg.npoints>=min_points && msg.mx<max_dist);
     string param = PARAM_PNPCONDITIONBUFFER + string("personhere"); 

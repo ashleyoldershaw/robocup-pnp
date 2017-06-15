@@ -1,13 +1,16 @@
-goto_maindoor;
-enter_maindoor;
-goto_Room1;
+goto_entrance;
+goto_livingroom;
 lookfor_person;
-sense_persondetected;
 < persondetected? approachperson:
   (not persondetected)? say_comehere >;
 waitfor_personhere;
 ask_whichdrink;
-answer_drink_@X
-serve_drink_@X;
-
+answer_drink_@X;
+goto_fridge;
+grab_drink_@X;
+goto_livingroom;
+say_drink_@X;
+waitfor_done;
+say_goodbye;
+goto_exit;
 

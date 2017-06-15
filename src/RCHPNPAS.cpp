@@ -31,6 +31,7 @@ RCHPNPActionServer::RCHPNPActionServer(ros::NodeHandle n) : PNPActionServer(), h
     register_action("approach",&RCHPNPActionServer::approach,this);
     register_action("ask",&RCHPNPActionServer::ask,this);
     register_action("answer",&RCHPNPActionServer::answer,this);
+    register_action("grab",&RCHPNPActionServer::grab,this);
     register_action("followperson",&RCHPNPActionServer::followperson,this);
 
 
