@@ -100,21 +100,33 @@ $ ./runplan.sh diago navigation
     - When the plan is waiting for a person (waitfor_personhere action), 
       move a colored square in the simulator in front of the robot (drag with mouse).
 
-    - The robot asks which drink, send a condition with the following command in another terminal
-```
-$ rostopic pub /diago/PNPConditionEvent std_msgs/String "data: 'drink_coke'" --once
-```
-    (you can replace coke with your favourite drink).
+    - The robot asks which drink, send a condition about which drink you would like (see below).
 
-    - The robot goes to the fridge, grabs the drink, returns to the living_room and says 
+    - The robot goes to the fridge, grabs the drink, returns to the living room and says 
       to the person to take the drink.
 
-    - Use the following command when done:
-```
-      $ rostopic pub /diago/PNPConditionEvent std_msgs/String "data: 'done'" --once
-```
+    - Tell the robot when done (see below).
 
     - The robot leaves the apartment, while you can enjoy the drink ;-)))
+
+
+
+Commands to send conditions (in another terminal)
+
+Condition about what you'd like to drink.
+
+```
+$ rostopic pub /diago/PNPConditionEvent std_msgs/String "data: 'drink_coke'" --once
+(you can replace coke with your favourite drink).
+```
+
+Condition about you got the drink.
+
+```
+$ rostopic pub /diago/PNPConditionEvent std_msgs/String "data: 'done'" --once
+```
+
+    
 
 
 
