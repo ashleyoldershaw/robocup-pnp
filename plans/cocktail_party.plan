@@ -1,7 +1,7 @@
 goto_entrance;
 goto_livingroom;
 lookfor_person;
-< persondetected? approachperson:
+< persondetected? goto_person:
   (not persondetected)? say_comehere >;
 waitfor_personhere;
 ask_whichdrink;
