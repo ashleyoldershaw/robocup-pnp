@@ -52,6 +52,10 @@ $ ./actioncmd.sh diago goto_kitchen start
 ## Quick run instructions ##
 
 Robot moving in the apartment in a Navigation test.
+Generation and execution of the plan described in 
+~/src/ROSPlan/src/rosplan/rosplan_demos/common/
+d_robocupathome.pddl + p_navigation.pddl
+
 
 Terminal 1:
 
@@ -73,27 +77,41 @@ Select:
     Robot: diago
     Localization: thin_localizer
     Navigation: move_base
+    Demo: rcathome
     Start
-    
+
+
+
 Terminal 3:
 
 ```
-$ cd ~/src/robocupathome_pnp/launch
-$ roslaunch rcathome_pnp.launch
+rosservice call /kcl_rosplan/planning_server
 ```
+
+
+## Single plan execution ##
+
 
 Terminal 4:
 
 ```
 $ cd ~/src/robocupathome_pnp/plans
-$ ./runplan.sh diago navigation
+$ ./runplan.sh navigation
 ```
+
+Note: to stop a plan at any time use
+
+```
+$ ./runplan.sh stop
+```
+
 
 ## Cocktail Party plan execution ##
 
-- Start terminals 1 to 4 as in the previous section, using 'cocktail_party' as plan name.
 
-- Observe the flow of execution of the plan on Terminal 3
+- Start the plan generation of p_cocktailparty.pddl
+
+- Observe the flow of execution of the plan:
 
     - The robot enters the apartment, reaches the living_room and looks for a person.
 
@@ -117,7 +135,6 @@ Condition about what you'd like to drink.
 
 ```
 $ rostopic pub /diago/PNPConditionEvent std_msgs/String "data: 'drink_coke'" --once
-(you can replace coke with your favourite drink).
 ```
 
 Condition about you got the drink.
@@ -125,10 +142,5 @@ Condition about you got the drink.
 ```
 $ rostopic pub /diago/PNPConditionEvent std_msgs/String "data: 'done'" --once
 ```
-
-    
-
-
-
 
 

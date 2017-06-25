@@ -21,7 +21,7 @@ void RCHPNPActionServer::initLocations() {
 	locationcoords["corridor1U"].set(6.5, 17.5);
 	locationcoords["corridor1D"].set(6.0, 8.0);
 	locationcoords["corridor2U"].set(8.0, 17.5);
-	locationcoords["bedroomin"].set(3.0, 18.0);
+	locationcoords["bedroom"].set(3.0, 18.0);
 	locationcoords["bedroomout"].set(5.7, 17.5);
 	locationcoords["livingroom"].set(4.5, 3.5);
 	locationcoords["hall"].set(8.3, 7.0);
@@ -36,24 +36,6 @@ void RCHPNPActionServer::initDoors() {
 }
 
 
-bool RCHPNPActionServer::getLocationPosition(string loc, double &GX, double &GY) {
-
-	if (locationcoords.find(loc)!=locationcoords.end()) {
-		GX = locationcoords[loc].X; GY = locationcoords[loc].Y;
-	}
-    else {
-        ROS_ERROR_STREAM("Location "<<loc<<" unknown.");
-        return false;
-    }
-
-    ROS_INFO_STREAM("Location " << loc << " at " << GX  << " , " << GY);  
-
-    return true;
-}
-
-
-
-
 
 /*
  * ACTIONS
@@ -61,25 +43,19 @@ bool RCHPNPActionServer::getLocationPosition(string loc, double &GX, double &GY)
 
 
 
-void RCHPNPActionServer::followperson(string params, bool *run) {
-
-  if (!run) return;
-
-  cout << "### Executing Follow Person " << params << " ... " << endl;
-
-  do_follow_person(run);
-
-  cout << "### Follow Person " << params << ((*run)?" Completed":" Aborted") << endl;
-
-}
-
-
 void RCHPNPActionServer::goto_movebase(string params, bool *run) {
 
   cout << "### Executing Move " << params << " ... " << endl;
 
+  vector<string> vparams;
+  boost::split(vparams, params, boost::is_any_of("_")); // split parameters
+
+  string loc = vparams[0];
+  if (vparams.size()>1)
+    loc = vparams[1];
+
   double GX,GY;
-  if (getLocationPosition(params,GX,GY)) {
+  if (getLocationPosition(loc,GX,GY)) {
     do_movebase(GX,GY,0,run);
   }
   else 
@@ -147,18 +123,25 @@ void RCHPNPActionServer::ask(string params, bool *run) {
 }
 
 
-
-
 void RCHPNPActionServer::answer(string params, bool *run) {
 
     cout << "### Executing Answer " << params << " ... " << endl;
 
-    waitfor(params,run);
+    waitforloc(params,run);
 
     cout << "### Answer " << params << ((*run)?" Completed":" Aborted") << endl;
 
 }
 
+void RCHPNPActionServer::approach(string params, bool *run) {
+
+    cout << "### Executing Approach " << params << " ... " << endl;
+
+    wait("1",run);
+
+    cout << "### Approach " << params << ((*run)?" Completed":" Aborted") << endl;
+
+}
 
 void RCHPNPActionServer::grab(string params, bool *run) {
 
@@ -176,12 +159,14 @@ void RCHPNPActionServer::enter(string params, bool *run) {
 
     cout << "### Executing Enter " << params << " ... " << endl;
 
-	
-    // TODO
-	// do_move(doorcoords[params].enterX,doorcoords[params].enterY);
+    double GX,GY;
+    if (getDoorEntrancePosition(params,GX,GY)) {
+        do_movebase(GX,GY,0,run);
+    }
+    else 
+        ROS_WARN("Move: Cannot find door %s.",params.c_str());
 
     cout << "### Enter " << params << ((*run)?" Completed":" Aborted") << endl;
-
 }
 
 
@@ -189,7 +174,12 @@ void RCHPNPActionServer::exit(string params, bool *run) {
 
     cout << "### Executing Exit " << params << " ... " << endl;
 
-    // TODO
+    double GX,GY;
+    if (getDoorExitPosition(params,GX,GY)) {
+        do_movebase(GX,GY,0,run);
+    }
+    else 
+        ROS_WARN("Move: Cannot find door %s.",params.c_str());
 
     cout << "### Exit " << params << ((*run)?" Completed":" Aborted") << endl;
 
@@ -200,7 +190,8 @@ void RCHPNPActionServer::lookfor(string params, bool *run) {
 
     cout << "### Executing Lookfor " << params << " ... " << endl;
 
-    do_turn("ABS", 135, run);  ros::Duration(1.0).sleep();
+    wait("1",run);
+    do_turn("ABS", 135, run); ros::Duration(1.0).sleep();
     do_turn("ABS", 215, run); ros::Duration(1.0).sleep();
     do_turn("ABS", 180, run); ros::Duration(1.0).sleep();
 
@@ -209,14 +200,37 @@ void RCHPNPActionServer::lookfor(string params, bool *run) {
 }
 
 
-void RCHPNPActionServer::approach(string params, bool *run) {
+void RCHPNPActionServer::waitforloc(string params, bool *run) {
 
-    cout << "### Executing Approach " << params << " ... " << endl;
+    cout << "### Executing Waitforloc " << params << " ... " << endl;
 
-    waitfor("HRIreceived",run);
+    vector<string> vparams;
+    boost::split(vparams, params, boost::is_any_of("_")); // split parameters
 
-    cout << "### Approach " << params << ((*run)?" Completed":" Aborted") << endl;
+    string xparams = ""; int i=0;
+    for (i=0; i<vparams.size()-2; i++)
+        xparams += vparams[i] + "_";
+    xparams += vparams[i];
+
+    PNPActionServer::waitfor(xparams,run);
+
+    cout << "### Waitforloc " << params << ((*run)?" Completed":" Aborted") << endl;
 
 }
 
+
+void RCHPNPActionServer::sense(string params, bool *run) {
+
+    cout << "### Executing Sense " << params << " ... " << endl;
+
+    vector<string> vparams;
+    boost::split(vparams, params, boost::is_any_of("_")); // split parameters
+
+    if (vparams[0]=="persondetected") {
+        cout << "  Sense " << vparams[0] << " : false " << endl;
+    }
+
+    cout << "### Sense " << params << ((*run)?" Completed":" Aborted") << endl;
+
+}
 

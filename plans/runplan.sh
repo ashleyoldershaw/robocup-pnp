@@ -1,5 +1,5 @@
 #!/bin/sh
-# Use: ./runplan.sh <robotname> <planname>
-# Example: ./runplan.sh diago cocktail_party
+# Use: ./runplan.sh <planname>
+# Example: ./runplan.sh cocktail_party
 
-rostopic pub /$1/planToExec std_msgs/String "data: '$2'" --once
+rostopic pub /diago/planToExec std_msgs/String "data: '$1'" --once

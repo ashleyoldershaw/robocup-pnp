@@ -8,22 +8,24 @@
 
     <param name="robot_name" value="$(arg robot_name)" />
 
+    <!-- PNP engine -->
+
     <node pkg="pnp_ros" type="pnp_node" name="pnp" args="" output="screen">
         <param name="plan_folder" value="$(arg plan_folder)" />
         <param name="current_plan" value="stop" />
         <param name="use_java_connection" value="$(arg PNPGUI)" />
     </node>
 
+    <!-- PNP action server -->
+
     <node pkg="robocupathome_pnp" type="rcathome_pnpas" name="robocupathome_pnpas" args="" output="screen">      
     </node>
 
-    <node pkg="tcp_interface" type="tcp_interface" name="tcp_interface" args="" output="screen">
-        <param name="TCP_server_port" value="9000"/>
-        <param name="UDP_server_port" value="9100"/>
-        <param name="network_interface" value="wlan0"/>
-        <param name="UDP_team_min_port" value="9100"/>
-        <param name="UDP_team_max_port" value="9110"/>
-        <param name="config_file" value="$(find tcp_interface)/config/UDPpeers.cfg"/>    
+
+    <!-- PNP ROSPlan -->
+
+    <node pkg="pnp_rosplan" type="pnp_rosplan_node" name="pnp_rosplan" args="" output="screen">
+        <param name="plan_folder" value="$(arg plan_folder)" />
     </node>
 
     <!-- CONDITIONS -->
@@ -43,12 +45,16 @@
     <node pkg="rococo_navigation" name="turn" type="turn_node" args="-server $(arg robot_name)"  output="screen">
 	</node>
 
-    <node pkg="rococo_navigation" name="follow_corridor" type="follow_corridor_node" args="-server $(arg robot_name)"  output="screen">
-	</node>
-
-	  
-	<node pkg="rococo_navigation" name="follow_person" type="follow_person_node" args="-server $(arg robot_name)"  output="screen">
-	</node>
+    <!-- AUX -->
+    
+    <node pkg="tcp_interface" type="tcp_interface" name="tcp_interface" args="" output="screen">
+        <param name="TCP_server_port" value="9000"/>
+        <param name="UDP_server_port" value="9100"/>
+        <param name="network_interface" value="wlan0"/>
+        <param name="UDP_team_min_port" value="9100"/>
+        <param name="UDP_team_max_port" value="9110"/>
+        <param name="config_file" value="$(find tcp_interface)/config/UDPpeers.cfg"/>    
+    </node>
 
 
 </group><!-- ns -->

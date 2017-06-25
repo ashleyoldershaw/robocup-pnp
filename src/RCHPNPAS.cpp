@@ -28,11 +28,12 @@ RCHPNPActionServer::RCHPNPActionServer(ros::NodeHandle n) : PNPActionServer(), h
     register_action("exit",&RCHPNPActionServer::exit,this);
     register_action("say",&RCHPNPActionServer::say,this);
     register_action("lookfor",&RCHPNPActionServer::lookfor,this);
-    register_action("approach",&RCHPNPActionServer::approach,this);
     register_action("ask",&RCHPNPActionServer::ask,this);
     register_action("answer",&RCHPNPActionServer::answer,this);
+    register_action("approach",&RCHPNPActionServer::approach,this);
     register_action("grab",&RCHPNPActionServer::grab,this);
-    register_action("followperson",&RCHPNPActionServer::followperson,this);
+    register_action("sense",&RCHPNPActionServer::sense,this);
+    register_action("waitforloc",&RCHPNPActionServer::waitforloc,this);
 
 
     handle.param("robot_name",robotname,string("diago"));

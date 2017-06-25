@@ -1,7 +1,7 @@
 goto_entrance;
 goto_kitchen;
 goto_corridor2U;
-goto_bedroomin;
+goto_bedroom;
 goto_bedroomout;
 goto_technicalroom;
 goto_livingroom;

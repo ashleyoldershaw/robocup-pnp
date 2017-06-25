@@ -83,8 +83,10 @@ public:
     // Get current robot pose
     bool getRobotPose(string robotname, double &x, double &y, double &th_rad);
 
-    // Get coordinates of semantic location
+    // Get coordinates of semantic locations and doors
     bool getLocationPosition(string loc, double &GX, double &GY);
+    bool getDoorEntrancePosition(string loc, double &GX, double &GY);
+    bool getDoorExitPosition(string loc, double &GX, double &GY);
 
 	// init Door coordinates
 	void initDoors();
@@ -99,19 +101,18 @@ public:
     void exit(string params, bool *run);
     void say(string params, bool *run);
     void lookfor(string params, bool *run);
-    void approach(string params, bool *run);
     void ask(string params, bool *run);
 	void answer(string params, bool *run);
 	void grab(string params, bool *run);
-    void followperson(string params, bool *run);
+	void sense(string params, bool *run);
+	void approach(string params, bool *run);
+	void waitforloc(string params, bool *run);
+
 
 
 	// ACTION BASE UTILS
     void do_movebase(float GX, float GY, float GTh_DEG, bool *run);
     void do_turn(string absrel_flag, float GTh_DEG, bool *run);
-    void do_follow_corridor(float GX, float GY, bool *run);
-    void do_follow_person(bool *run);
-	void do_fixedMove(string params, bool *run);
 
     /*
      * CONDITIONS FUNCTIONS AND CALLBACKS
