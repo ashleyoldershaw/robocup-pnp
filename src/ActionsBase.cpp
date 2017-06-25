@@ -2,6 +2,7 @@
 #include <tf/transform_listener.h>
 #include <tcp_interface/RCOMMessage.h>
 #include <boost/algorithm/string.hpp>
+#include <std_srvs/Empty.h>
 
 #include "RCHPNPAS.h"
 #include "topics.h"
@@ -114,6 +115,24 @@ bool RCHPNPActionServer::getDoorExitPosition(string loc, double &GX, double &GY)
  */
 
 
+void RCHPNPActionServer::clear_costmaps()
+{
+    ROS_INFO("Clear costmap!");
+
+    char srvname[80];
+    sprintf(srvname,"/%s/move_base_node/clear_costmaps",robotname.c_str());
+    
+    ros::ServiceClient client = handle.serviceClient<std_srvs::Empty>(srvname);
+    std_srvs::Empty srv;
+    if (client.call(srv)) {
+        ROS_INFO("Costmaps cleared.\n");
+    }
+    else {
+        ROS_ERROR("Failed to call service %s", srvname );
+    }
+}
+
+
 
 void RCHPNPActionServer::do_movebase(float GX, float GY, float GTh_DEG, bool *run) { // theta in degrees
 
@@ -163,6 +182,8 @@ void RCHPNPActionServer::do_movebase(float GX, float GY, float GTh_DEG, bool *ru
 	  ros::Duration(0.25).sleep();
       secs =ros::Time::now().toSec();
   }
+
+  clear_costmaps(); ros::Duration(0.25).sleep();
 
   // Set the goal (MAP frame)
   move_base_msgs::MoveBaseGoal goal;

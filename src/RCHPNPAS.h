@@ -111,6 +111,7 @@ public:
 
 
 	// ACTION BASE UTILS
+    void clear_costmaps();
     void do_movebase(float GX, float GY, float GTh_DEG, bool *run);
     void do_turn(string absrel_flag, float GTh_DEG, bool *run);
 
