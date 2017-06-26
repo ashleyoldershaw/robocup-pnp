@@ -99,6 +99,7 @@ public:
     void goto_movebase(string params, bool *run);
     void enter(string params, bool *run);
     void exit(string params, bool *run);
+    void tell(string params, bool *run);
     void say(string params, bool *run);
     void lookfor(string params, bool *run);
     void ask(string params, bool *run);

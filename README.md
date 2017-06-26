@@ -88,6 +88,15 @@ Terminal 3:
 rosservice call /kcl_rosplan/planning_server
 ```
 
+_Note_: this service uses the following files for generating the final PNP:
+rosplan/rosplan_demos/common/d.pddl - domain
+rosplan/rosplan_demos/common/p.pddl - problem
+robocupathome_pnp/plans/default.er - execution rules
+
+The generated plan is written as a text file in robocupathome_pnp/plans/plan.txt
+and as a PNP file in robocupathome_pnp/plans/AUTOGEN_plan_0.pnml 
+PNP (.pnml) files can be read with Jarp (see Petri Net Plans library).
+
 
 ## Single plan execution ##
 

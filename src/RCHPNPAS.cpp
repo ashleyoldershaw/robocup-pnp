@@ -26,6 +26,7 @@ RCHPNPActionServer::RCHPNPActionServer(ros::NodeHandle n) : PNPActionServer(), h
     register_action("goto",&RCHPNPActionServer::goto_movebase,this);
     register_action("enter",&RCHPNPActionServer::enter,this);
     register_action("exit",&RCHPNPActionServer::exit,this);
+    register_action("tell",&RCHPNPActionServer::tell,this);
     register_action("say",&RCHPNPActionServer::say,this);
     register_action("lookfor",&RCHPNPActionServer::lookfor,this);
     register_action("ask",&RCHPNPActionServer::ask,this);
@@ -34,7 +35,6 @@ RCHPNPActionServer::RCHPNPActionServer(ros::NodeHandle n) : PNPActionServer(), h
     register_action("grab",&RCHPNPActionServer::grab,this);
     register_action("sense",&RCHPNPActionServer::sense,this);
     register_action("waitforloc",&RCHPNPActionServer::waitforloc,this);
-
 
     handle.param("robot_name",robotname,string("diago"));
 

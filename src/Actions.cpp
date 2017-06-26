@@ -65,6 +65,10 @@ void RCHPNPActionServer::goto_movebase(string params, bool *run) {
 
 }
 
+// tell - just as say but with different preconditions
+void RCHPNPActionServer::tell(string params, bool *run) {
+    say(params,run);
+}
 
 void RCHPNPActionServer::say(string params, bool *run) {
   cout << "### Executing Say " << params << " ... " << endl;
