@@ -33,7 +33,7 @@ bool RCHPNPActionServer::getRobotPose(std::string robotname, double &x, double &
         listener = new tf::TransformListener();
     }
 
-    string src_frame = "/map";
+    string src_frame = "/" + robotname + "/map";;
     string dest_frame = "/" + robotname + "/base_frame";
     if (robotname=="") { // local trasnformation
         src_frame = "map";
@@ -159,11 +159,12 @@ void RCHPNPActionServer::do_movebase(float GX, float GY, float GTh_DEG, bool *ru
 
   if (ac_movebase==NULL) { //create the client only once
     // Define the action client (true: we want to spin a thread)
-    ac_movebase = new actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>(TOPIC_MOVE_BASE, true);
+    string mbtopic = TOPIC_MOVE_BASE;
+    ac_movebase = new actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>(mbtopic, true);
 
     // Wait for the action server to come up
     while(!ac_movebase->waitForServer(ros::Duration(5.0)) && *run){
-	    ROS_INFO("Waiting for move_base action server to come up");
+	    ROS_INFO("Waiting for move_base action server to come up (action: %s)", mbtopic.c_str());
     }
   }
 
@@ -188,7 +189,7 @@ void RCHPNPActionServer::do_movebase(float GX, float GY, float GTh_DEG, bool *ru
   // Set the goal (MAP frame)
   move_base_msgs::MoveBaseGoal goal;
 
-  goal.target_pose.header.frame_id = "/map";
+  goal.target_pose.header.frame_id = "/" + robotname + "/map";
   goal.target_pose.header.stamp = ros::Time::now();
 
   goal.target_pose.pose.position.x = GX;

@@ -5,7 +5,7 @@ PNP Action Server for RoboCup@Home domain
 ## Build ##
 
 Compile it in a ROS catkin workspace.
-Requires: pnp_ros
+Requires:  ROSPlan, PNP, pnp_ros, pnp_rosplan, ...
 
 ## Run ##
 
