@@ -21,7 +21,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(rcathome_pnpas src/main.cpp src/RCHPNPAS.cpp src/Actions.cpp src/ActionsBase.cpp src/Conditions.cpp)
+add_executable(rcathome_pnpas src/main.cpp src/RCHPNPAS.cpp src/Actions.cpp src/ActionsBase.cpp src/Conditions.cpp src/TCPClient.cpp)
 
 target_link_libraries(rcathome_pnpas ${pnp_ros_LIBRARIES} ${catkin_LIBRARIES})
 

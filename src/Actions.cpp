@@ -2,6 +2,7 @@
 #include <tf/transform_listener.h>
 #include <tcp_interface/RCOMMessage.h>
 #include <boost/algorithm/string.hpp>
+#include <sstream>
 
 #include "RCHPNPAS.h"
 #include "topics.h"
@@ -70,6 +71,75 @@ void RCHPNPActionServer::tell(string params, bool *run) {
     say(params,run);
 }
 
+
+string RCHPNPActionServer::sendMODIM(string modimstr) {
+  // Send to modim
+  string modim_ip = "127.0.0.1"; int modim_port = 9101;
+  bool bc = tcpclient.connect(modim_ip.c_str(), modim_port);
+  if (bc) {
+
+    cout << "Send: " << modimstr << endl;    
+
+    tcpclient.send(modimstr.c_str());
+    tcpclient.send(" ###ooo###\n\r");
+
+    char buffer[200];
+    int br = tcpclient.TCPClient::receive(buffer, 200);
+    if (buffer[0]=='u' && buffer[1]=='\'') {
+        buffer[0]=' '; buffer[1]=' '; buffer[br-2]='\0';
+    }
+    else if (buffer[0]=='\'') {
+        buffer[0]=' '; buffer[br-2]='\0';
+    }
+    
+	tcpclient.close();
+
+    string r = string(buffer); boost::trim(r);
+
+    cout << "Received: [" << r << "]" << endl;    
+
+    return r;
+  }
+}
+
+
+void RCHPNPActionServer::sendMODIM_text(string params) {
+    ostringstream ss;
+
+    string r = params;
+    for (int i=0; i<r.size(); i++) {
+        if (r[i]=='_') r[i]=' ';
+    }
+
+    ss << "im.display.display_text(\"" << r <<"\",\"default\")" << "\n\r";
+    sendMODIM(ss.str());
+}
+
+
+void RCHPNPActionServer::sendMODIM_buttons(string params) {
+
+    sendMODIM("im.display.remove_buttons()");
+
+    ostringstream ss;
+    ss << "im.display.display_buttons(";
+    if (params.find("drink")!=string::npos) 
+        ss << "[ ('coke','Coke'), ('beer','Beer') ]";
+    else if (params.find("done")!=string::npos) 
+        ss << "[ ('done','OK') ]";
+    ss << ")\n\r";
+    sendMODIM(ss.str());
+}
+
+void RCHPNPActionServer::MODIM_init() {
+    sendMODIM("im.display.remove_buttons()");
+    sendMODIM_text("Welcome");
+}
+
+void RCHPNPActionServer::GUIinit(string params, bool *run) {
+    MODIM_init();
+}
+
+
 void RCHPNPActionServer::say(string params, bool *run) {
   cout << "### Executing Say " << params << " ... " << endl;
 
@@ -99,6 +169,8 @@ void RCHPNPActionServer::say(string params, bool *run) {
 	stage_say_pub.publish(mess);
   }
 
+  sendMODIM_text(params);
+
   cout << "### Say " << params << ((*run)?" Completed":" Aborted") << endl;
 
 }
@@ -122,6 +194,9 @@ void RCHPNPActionServer::ask(string params, bool *run) {
     ros::Duration(1.0).sleep();
   end_speech=false;
 
+  sendMODIM_text(params);
+  sendMODIM_buttons(params);
+
   cout << "### Ask " << params << ((*run)?" Completed":" Aborted") << endl;
 
 }
@@ -131,7 +206,27 @@ void RCHPNPActionServer::answer(string params, bool *run) {
 
     cout << "### Executing Answer " << params << " ... " << endl;
 
-    waitforloc(params,run);
+    string r = sendMODIM("im.display.answer()");
+    cout << "Answer: " << r << endl;
+
+    vector<string> vparams;
+    boost::split(vparams, params, boost::is_any_of("_")); // split parameters
+
+    stringstream ss;
+    if (vparams.size()==1)
+        ss << r;
+    else
+        ss << vparams[0] << "_" << r;
+
+    cout << "Publish condition: " << ss.str();
+
+    std_msgs::String out;
+    out.data = ss.str();
+    PNP_cond_pub.publish(out);
+
+    waitfor(params,run);
+
+    sendMODIM("im.display.remove_buttons()");
 
     cout << "### Answer " << params << ((*run)?" Completed":" Aborted") << endl;
 
@@ -203,26 +298,6 @@ void RCHPNPActionServer::lookfor(string params, bool *run) {
 
 }
 
-
-void RCHPNPActionServer::waitforloc(string params, bool *run) {
-
-    cout << "### Executing Waitforloc " << params << " ... " << endl;
-
-    vector<string> vparams;
-    boost::split(vparams, params, boost::is_any_of("_")); // split parameters
-
-    string xparams = ""; int i=0;
-    for (i=0; i<vparams.size()-2; i++)
-        xparams += vparams[i] + "_";
-    xparams += vparams[i];
-
-    PNPActionServer::waitfor(xparams,run);
-
-    cout << "### Waitforloc " << params << ((*run)?" Completed":" Aborted") << endl;
-
-}
-
-
 void RCHPNPActionServer::sense(string params, bool *run) {
 
     cout << "### Executing Sense " << params << " ... " << endl;
@@ -237,4 +312,9 @@ void RCHPNPActionServer::sense(string params, bool *run) {
     cout << "### Sense " << params << ((*run)?" Completed":" Aborted") << endl;
 
 }
+
+
+
+
+
 

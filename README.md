@@ -75,7 +75,7 @@ $ ./start_simulation.py
 Select:
     Map: peccioli@Home
     Robot: diago
-    Localization: thin_localizer
+    Localization: srrg_localizer
     Navigation: move_base
     Demo: rcathome
     Start
@@ -143,13 +143,13 @@ Commands to send conditions (in another terminal)
 Condition about what you'd like to drink.
 
 ```
-$ rostopic pub /diago/PNPConditionEvent std_msgs/String "data: 'drink_coke'" --once
+$ rostopic pub /diago_0/PNPConditionEvent std_msgs/String "data: 'drink_coke'" --once
 ```
 
 Condition about you got the drink.
 
 ```
-$ rostopic pub /diago/PNPConditionEvent std_msgs/String "data: 'done'" --once
+$ rostopic pub /diago_0/PNPConditionEvent std_msgs/String "data: 'done'" --once
 ```
 
 

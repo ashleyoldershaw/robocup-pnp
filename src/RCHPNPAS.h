@@ -14,10 +14,14 @@
 #include <rococo_navigation/FollowPersonAction.h>
 
 #include <tcp_interface/RCOMMessage.h>
+
 #include <laser_analysis/LaserObstacleMap.h>
 
 #include <map>
 #include <boost/thread/thread.hpp>
+
+#include "TCPClient.h"
+
 
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 
@@ -76,6 +80,13 @@ private:
 	map<string, DoorCoords> doorcoords; // door coordinates
 	map<string, LocationCoords> locationcoords; // location coordinates
 
+    TCPClient tcpclient; // TCP client for MODIM
+
+    void MODIM_init();
+    string sendMODIM(string modimstr);
+    void sendMODIM_text(string params);
+    void sendMODIM_buttons(string params);
+
 public:
 
     RCHPNPActionServer(ros::NodeHandle n);
@@ -108,6 +119,7 @@ public:
 	void sense(string params, bool *run);
 	void approach(string params, bool *run);
 	void waitforloc(string params, bool *run);
+	void GUIinit(string params, bool *run);
 
 
 
