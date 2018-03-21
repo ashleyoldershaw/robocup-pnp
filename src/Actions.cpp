@@ -132,6 +132,10 @@ void RCHPNPActionServer::sendMODIM_buttons(string params) {
 
 void RCHPNPActionServer::MODIM_init() {
     sendMODIM("im.display.remove_buttons()");
+    
+    sendMODIM("im.setProfile(['*', '*', 'en', '*'])");
+    sendMODIM("im.setPath('/home/ubuntu/src/robocupathome_pnp/plans/cocktail_party_demo/')");
+    
     sendMODIM_text("Welcome");
 }
 
@@ -139,6 +143,40 @@ void RCHPNPActionServer::GUIinit(string params, bool *run) {
     MODIM_init();
 }
 
+void RCHPNPActionServer::interact(string params, bool *run) {
+  cout << "### Executing Interact " << params << " ... " << endl;
+
+  if (!*run)
+      return;
+
+
+  vector<string> vparams;
+  boost::split(vparams, params, boost::is_any_of("_")); // split parameters
+
+  if (vparams.size() == 1){
+    //Case interact_action
+    std::string action = vparams[0];
+    std::string modim_str = "im.execute(\""+action+"\")";
+    sendMODIM(modim_str);
+  } else if (vparams.size() > 1){
+    //Case interact_action_paramsanswer
+    std::string action = vparams[0];
+    std::string modim_str = "im.execute(\""+action+"\")";
+    sendMODIM(modim_str);
+
+    std::string paramsanswer = vparams[1];
+    for (size_t i = 2; i<vparams.size(); i++)
+      paramsanswer = paramsanswer + "_" + vparams[i];
+
+    waitfor(paramsanswer, run);
+  }
+
+  sendMODIM("im.display.remove_buttons()");
+
+  cout << "### Interact " << params << ((*run)?" Completed":" Aborted") << endl;
+
+  
+}
 
 void RCHPNPActionServer::say(string params, bool *run) {
   cout << "### Executing Say " << params << " ... " << endl;

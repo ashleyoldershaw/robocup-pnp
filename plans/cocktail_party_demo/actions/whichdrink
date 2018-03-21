@@ -1,0 +1,12 @@
+TEXT
+<*,*,*,*>: "Which drink do you want?"
+----
+TTS
+<*,*,*,*>: "Which drink do you want?"
+----
+BUTTONS
+drink_coke
+<*,*,*,*>: "Coke"
+drink_beer
+<*,*,*,*>: "Beer"
+----

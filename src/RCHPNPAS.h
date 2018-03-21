@@ -113,8 +113,9 @@ public:
     void tell(string params, bool *run);
     void say(string params, bool *run);
     void lookfor(string params, bool *run);
+    void interact(string params, bool *run);
     void ask(string params, bool *run);
-	void answer(string params, bool *run);
+    void answer(string params, bool *run);
 	void grab(string params, bool *run);
 	void sense(string params, bool *run);
 	void approach(string params, bool *run);

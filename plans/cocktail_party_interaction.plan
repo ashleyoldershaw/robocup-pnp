@@ -1,0 +1,19 @@
+GUIinit;
+goto_entrance;
+#goto_livingroom;
+lookfor_person;
+< persondetected? goto_person:
+  (not persondetected)? interact_comehere >;
+waitfor_personhere;
+interact_whichdrink_drink_@X;
+say_goto_@X;
+goto_fridge;
+say_grasp_@X;
+grab_drink_@X;
+goto_livingroom;
+say_here_is_your_@X;
+ask_done;
+answer_done;
+say_goodbye;
+goto_exit;
+
