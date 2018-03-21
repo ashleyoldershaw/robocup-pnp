@@ -29,7 +29,7 @@ $ ./runplan.sh <robotname> <planname>
 Example: 
 
 ```
-$ ./runplan.sh diago cocktail_party
+$ ./runplan.sh diago_0 cocktail_party
 ```
 
 Note: use 'stop' as planname to stop the current plan.
@@ -46,7 +46,7 @@ $ ./actioncmd.sh <robotname> <actionname> {start|end|interrupt}
 Example:
 
 ```
-$ ./actioncmd.sh diago goto_kitchen start
+$ ./actioncmd.sh diago_0 goto_kitchen start
 ```
 
 ## Quick run instructions ##
@@ -151,5 +151,63 @@ Condition about you got the drink.
 ```
 $ rostopic pub /diago_0/PNPConditionEvent std_msgs/String "data: 'done'" --once
 ```
+
+## Actions available ##
+
+```
+goto_<location>
+enter_<door>
+exit_<door>
+grab
+
+GUIinit
+say_<interaction>
+ask_<interaction>
+answer_<interaction>
+
+waitfor_<condition>
+lookfor_<condition>
+
+wait
+restartcurrentplan
+stopcurrentplan
+```
+
+Locations
+
+```
+home
+entrance
+exit
+corridor1U
+corridor1D
+corridor2U
+bedroom
+bedroomout
+livingroom
+hall
+technicalroom
+kitchen
+kitchentable
+fridge
+```
+
+Doors
+
+```
+maindoor
+```
+
+## Conditions available ##
+
+Sensor based conditions
+
+```
+personhere
+persondetected
+```
+
+MODIM interactions (GUI buttons or ASR)
+
 
 
