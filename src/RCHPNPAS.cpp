@@ -35,7 +35,7 @@ RCHPNPActionServer::RCHPNPActionServer(ros::NodeHandle n) : PNPActionServer(), h
     register_action("approach",&RCHPNPActionServer::approach,this);
     register_action("grab",&RCHPNPActionServer::grab,this);
     register_action("sense",&RCHPNPActionServer::sense,this);
-    register_action("GUIinit",&RCHPNPActionServer::GUIinit,this);
+    register_action("GUIstart",&RCHPNPActionServer::GUIinit,this);
 
     handle.param("robot_name",robotname,string("diago"));
 

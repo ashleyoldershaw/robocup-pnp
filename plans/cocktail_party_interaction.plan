@@ -1,12 +1,12 @@
-GUIinit;
+GUIstart;
 goto_entrance;
-#goto_livingroom;
+goto_livingroom;
 lookfor_person;
 < persondetected? goto_person:
   (not persondetected)? interact_comehere >;
 waitfor_personhere;
-interact_whichdrink_drink_@X;
-say_goto_@X;
+interact_whichdrink000drink_@X;
+interact_goto_@X;
 goto_fridge;
 say_grasp_@X;
 grab_drink_@X;
