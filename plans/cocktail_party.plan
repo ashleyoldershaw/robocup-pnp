@@ -1,12 +1,12 @@
-GUIinit;
+GUIstart;
 goto_entrance;
 goto_livingroom;
 lookfor_person;
 < persondetected? goto_person:
   (not persondetected)? say_comehere >;
-waitfor_personhere;
+waitfor_personhere;  ! *if* (timeout_waitfor_20) *do* goto_exit; fail_plan !
 ask_which_drink_do_you_want;
-answer_drink_@X;
+answer_drink_@X; ! *if* (not personhere) *do* goto_exit; fail_plan ! 
 say_goto_@X;
 goto_fridge;
 say_grasp_@X;

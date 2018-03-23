@@ -141,6 +141,7 @@ void RCHPNPActionServer::MODIM_init() {
 
 void RCHPNPActionServer::GUIinit(string params, bool *run) {
     MODIM_init();
+	wait("1",run);
 }
 
 void RCHPNPActionServer::interact(string params, bool *run) {
