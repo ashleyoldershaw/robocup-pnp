@@ -49,7 +49,7 @@ void RCHPNPActionServer::tcpCallback(tcp_interface::RCOMMessage msg) {
         boost::split(toks,sm,boost::is_any_of("()\" \n\r"));
         if (toks.size()>1) {
             vector<string>::iterator it = toks.begin();
-            string pre = *it++; // should be eityher 'button' or 'asr'
+            string pre = *it++; // should be either 'button' or 'asr'
             string frame = "-";
             if (pre=="asr") {
                 frame = *it++;

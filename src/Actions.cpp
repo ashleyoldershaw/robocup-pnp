@@ -76,14 +76,13 @@ string RCHPNPActionServer::sendMODIM(string modimstr) {
   // Send to modim
   string modim_ip = "127.0.0.1"; int modim_port = 9101;
   bool bc = tcpclient.connect(modim_ip.c_str(), modim_port);
+  char buffer[200]; buffer[0]='\0';
   if (bc) {
-
     cout << "Send: " << modimstr << endl;    
 
     tcpclient.send(modimstr.c_str());
     tcpclient.send(" ###ooo###\n\r");
-
-    char buffer[200];
+    
     int br = tcpclient.TCPClient::receive(buffer, 200);
     if (buffer[0]=='u' && buffer[1]=='\'') {
         buffer[0]=' '; buffer[1]=' '; buffer[br-2]='\0';
@@ -93,13 +92,12 @@ string RCHPNPActionServer::sendMODIM(string modimstr) {
     }
     
 	tcpclient.close();
-
-    string r = string(buffer); boost::trim(r);
-
-    cout << "Received: [" << r << "]" << endl;    
-
-    return r;
   }
+
+  string r = string(buffer); boost::trim(r);
+  cout << "Received: [" << r << "]" << endl;    
+  return r;
+
 }
 
 
@@ -124,6 +122,8 @@ void RCHPNPActionServer::sendMODIM_buttons(string params) {
     ss << "im.display.display_buttons(";
     if (params.find("drink")!=string::npos) 
         ss << "[ ('coke','Coke'), ('beer','Beer') ]";
+    else if (params.find("somethingelse")!=string::npos) 
+        ss << "[ ('yes','Yes'), ('no','No') ]";
     else if (params.find("done")!=string::npos) 
         ss << "[ ('done','OK') ]";
     ss << ")\n\r";
@@ -198,6 +198,8 @@ void RCHPNPActionServer::say(string params, bool *run) {
   message_to_send.value= to_send;
   rcom_pub.publish(message_to_send);
   
+  sendMODIM_text(params);
+
   end_speech=false;
   int sleeptime=SPEECH_TIMEOUT;
   bool psim=false;
@@ -213,8 +215,6 @@ void RCHPNPActionServer::say(string params, bool *run) {
 	mess.data = params;
 	stage_say_pub.publish(mess);
   }
-
-  sendMODIM_text(params);
 
   cout << "### Say " << params << ((*run)?" Completed":" Aborted") << endl;
 
@@ -233,13 +233,14 @@ void RCHPNPActionServer::ask(string params, bool *run) {
   message_to_send.value= to_send;
   rcom_pub.publish(message_to_send);
 
+  sendMODIM_text(params);
+
   end_speech=false;
   int sleeptime=SPEECH_TIMEOUT;
   while (*run && sleeptime-->0 && !end_speech && ros::ok())
     ros::Duration(1.0).sleep();
   end_speech=false;
 
-  sendMODIM_text(params);
   sendMODIM_buttons(params);
 
   cout << "### Ask " << params << ((*run)?" Completed":" Aborted") << endl;
@@ -263,7 +264,7 @@ void RCHPNPActionServer::answer(string params, bool *run) {
     else
         ss << vparams[0] << "_" << r;
 
-    cout << "Publish condition: " << ss.str();
+    cout << "Publish condition: " << ss.str() << endl;
 
     std_msgs::String out;
     out.data = ss.str();
