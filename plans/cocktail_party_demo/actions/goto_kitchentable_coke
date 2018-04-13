@@ -1,0 +1,9 @@
+TEXT
+<*,*,*,*>: "I'm going to get your coke at the kitchen table"
+----
+TTS
+<*,*,*,*>: "I'm going to get your coke at the kitchen table"
+----
+IMAGE
+<*,*,*,*>: img/coke.jpg
+----

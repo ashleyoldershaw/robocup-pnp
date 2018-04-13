@@ -1,0 +1,12 @@
+TEXT
+<*,*,*,*>: "Do you want something else to drink?"
+----
+TTS
+<*,*,*,*>: "Do you want something else to drink?"
+----
+BUTTONS
+somethingelse_yes
+<*,*,*,*>: "Yes"
+somethingelse_no
+<*,*,*,*>: "No, thanks"
+----

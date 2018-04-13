@@ -1,19 +1,22 @@
 GUIstart;
 goto_entrance;
-goto_livingroom;
+goto_livingroom; ! *if* (and personhere (not closetotarget))  *do* say_hello; waitfor_not_personhere; restart_action !
 lookfor_person;
 < persondetected? goto_person:
   (not persondetected)? interact_comehere >;
-waitfor_personhere;
-interact_whichdrink000drink_@X;
-interact_goto_@X;
-goto_fridge;
+waitfor_personhere;  ! *if* (timeout_waitfor_30) *do* goto_exit; fail_plan !
+LABEL_ASK;
+unknownvar_@X;
+interact_whichdrink000drink_@X; ! *if* (not personhere) *do* goto_exit; fail_plan ! 
+< equal_@X_beer? setvar_@LOC_fridge: equal_@X_coke? setvar_@LOC_kitchentable >;
+interact_goto_@LOC_@X;
+goto_@LOC;
 say_grasp_@X;
 grab_drink_@X;
-goto_livingroom;
+goto_livingroom;  ! *if* (and personhere (not closetotarget)) *do* say_hello; waitfor_not_personhere; restart_action !
 say_here_is_your_@X;
-ask_done;
-answer_done;
+unknownvar_@Y;
+interact_wantsomethingelse000somethingelse_@Y;
+< equal_@Y_yes? GOTO_LABEL_ASK: equal_@Y_no?  >;
 say_goodbye;
 goto_exit;
-
