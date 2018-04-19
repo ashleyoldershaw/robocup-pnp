@@ -74,7 +74,15 @@ void RCHPNPActionServer::tell(string params, bool *run) {
 
 string RCHPNPActionServer::sendMODIM(string modimstr) {
   // Send to modim
-  string modim_ip = "127.0.0.1"; int modim_port = 9101;
+  char* mip = getenv ("MODIM_IP");
+  std::string modim_ip = "127.0.0.1";
+  if (mip!=NULL){
+    modim_ip = std::string(mip);
+    printf ("MODIM_IP defined. Using %s", modim_ip.c_str());
+  } else
+    printf ("MODIM_IP not defined. Using %s", modim_ip.c_str());
+
+  int modim_port = 9101;
   bool bc = tcpclient.connect(modim_ip.c_str(), modim_port);
   char buffer[200]; buffer[0]='\0';
   if (bc) {
