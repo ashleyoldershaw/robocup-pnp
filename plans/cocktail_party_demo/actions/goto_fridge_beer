@@ -4,6 +4,6 @@ TEXT
 TTS
 <*,*,*,*>: "I'm going to get your beer to the fridge"
 ----
-#IMAGE
-#<*,*,*,*>: img/coke.jpg
-#----
+IMAGE
+<*,*,*,*>: img/beer.jpg
+----
