@@ -108,6 +108,7 @@ public:
      * ACTIONS
      */
     void goto_movebase(string params, bool *run);
+    void turn(string params, bool *run);
     void enter(string params, bool *run);
     void exit(string params, bool *run);
     void tell(string params, bool *run);

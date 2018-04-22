@@ -66,6 +66,28 @@ void RCHPNPActionServer::goto_movebase(string params, bool *run) {
 
 }
 
+void RCHPNPActionServer::turn(string params, bool *run) {
+
+  cout << "### Executing Turn " << params << " ... " << endl;
+
+  vector<string> vparams;
+  boost::split(vparams, params, boost::is_any_of("_")); // split parameters
+
+  stringstream ss(vparams[0]);
+  float deg;
+  ss >> deg;
+  string absrel_flag = "REL";
+  if (vparams.size()>1)
+    absrel_flag = vparams[1];
+
+  do_turn(absrel_flag, deg,run);
+
+  cout << "### Turn " << params << ((*run)?" Completed":" Aborted") << endl;
+
+}
+
+
+
 // tell - just as say but with different preconditions
 void RCHPNPActionServer::tell(string params, bool *run) {
     say(params,run);
