@@ -88,6 +88,31 @@ void RCHPNPActionServer::turn(string params, bool *run) {
 
 
 
+void RCHPNPActionServer::followperson(string params, bool *run) {
+
+  cout << "### Executing FollowPerson " << params << " ... " << endl;
+
+  float max_vel = 0.5;
+  if (params!="") {
+      vector<string> vparams;
+      boost::split(vparams, params, boost::is_any_of("_")); // split parameters
+      if (vparams.size()>0) {
+          stringstream ss(vparams[0]);
+          ss >> max_vel;
+      }
+  }
+
+  cout << "   do_followperson " << max_vel << " ... " << endl;
+
+  do_followperson(max_vel, run);
+
+  cout << "### FollowPerson " << params << ((*run)?" Completed":" Aborted") << endl;
+
+
+}
+
+
+
 // tell - just as say but with different preconditions
 void RCHPNPActionServer::tell(string params, bool *run) {
     say(params,run);

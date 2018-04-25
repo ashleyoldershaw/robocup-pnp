@@ -47,6 +47,9 @@
     <node pkg="rococo_navigation" name="turn" type="turn_node" args="-server $(arg robotname)"  output="screen">
 	</node>
 
+    <node pkg="rococo_navigation" name="followperson" type="follow_person_node" args="-server $(arg robotname)"  output="screen">
+	</node>
+
     <!-- AUX -->
     
     <node pkg="tcp_interface" type="tcp_interface" name="tcp_interface" args="" output="screen">

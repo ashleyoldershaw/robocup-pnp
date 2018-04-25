@@ -109,6 +109,7 @@ public:
      */
     void goto_movebase(string params, bool *run);
     void turn(string params, bool *run);
+    void followperson(string params, bool *run);
     void enter(string params, bool *run);
     void exit(string params, bool *run);
     void tell(string params, bool *run);
@@ -129,6 +130,7 @@ public:
     void clear_costmaps();
     void do_movebase(float GX, float GY, float GTh_DEG, bool *run);
     void do_turn(string absrel_flag, float GTh_DEG, bool *run);
+    void do_followperson(float max_vel, bool *run);
 
     /*
      * CONDITIONS FUNCTIONS AND CALLBACKS

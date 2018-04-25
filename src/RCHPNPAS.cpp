@@ -25,6 +25,7 @@ RCHPNPActionServer::RCHPNPActionServer(ros::NodeHandle n) : PNPActionServer(), h
 	// Actions implemented here
     register_action("goto",&RCHPNPActionServer::goto_movebase,this);
     register_action("turn",&RCHPNPActionServer::turn,this);
+    register_action("followperson",&RCHPNPActionServer::followperson,this);
     register_action("enter",&RCHPNPActionServer::enter,this);
     register_action("exit",&RCHPNPActionServer::exit,this);
     register_action("tell",&RCHPNPActionServer::tell,this);

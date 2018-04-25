@@ -248,12 +248,64 @@ void RCHPNPActionServer::do_turn(string absrel_flag, float GTh_DEG, bool *run) {
     ROS_INFO("Sending goal TURN %f", GTh_DEG);
     ac_turn->cancelAllGoals(); ros::Duration(0.1).sleep();
     ac_turn->sendGoal(goal);
+    ros::Duration(0.5).sleep();
 
-    while (!ac_turn->waitForResult(ros::Duration(0.1)) && (*run)){
+    while (!ac_turn->waitForResult(ros::Duration(0.1)) &&
+           ac_turn->getState()!=actionlib::SimpleClientGoalState::PENDING &&   
+           (*run)) {
        // ROS_INFO("Turning...");
     }
     ac_turn->cancelAllGoals();
 }
 
+
+
+
+void RCHPNPActionServer::do_followperson(float max_vel, bool *run) {
+
+cout << "DEBUG 1" << endl;
+
+    if (ac_followperson==NULL) {
+      ac_followperson = new actionlib::SimpleActionClient<rococo_navigation::FollowPersonAction>(TOPIC_FOLLOWPERSON, true); // (true: we want to spin a thread)
+
+      while(!ac_followperson->waitForServer(ros::Duration(5.0))){
+        ROS_INFO("Waiting for follow Person action server to come up");
+      }
+    }
+
+    if (!*run) return;
+
+
+    // Cancel all goals (JUST IN CASE SOME GOAL WAS NOT CLOSED BEFORE)
+    ac_followperson->cancelAllGoals(); ros::Duration(0.1).sleep(); // wait 0.1 sec
+
+    // Set the goal
+    rococo_navigation::FollowPersonGoal goal;
+    goal.target_X = 0;  goal.target_Y = 0;   // unused so far
+    goal.max_vel = max_vel;  // m/s
+
+    // Send the goal
+    ROS_INFO("Sending goal");
+    ac_followperson->sendGoal(goal);
+    ros::Duration(0.5).sleep();
+
+	  // Wait for termination
+    while (!ac_followperson->waitForResult(ros::Duration(0.1)) && 
+           ac_followperson->getState()!=actionlib::SimpleClientGoalState::PENDING &&   
+           (*run)) {
+	    // ROS_INFO_STREAM("Running... [" << ac.getState().toString() << "]");
+    }
+    ROS_INFO_STREAM("Finished [" << ac_followperson->getState().toString() << "]");
+
+    // Print result
+    if (ac_followperson->getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+        ROS_INFO("FollowPerson successful");
+    else
+        ROS_INFO("FollowPerson failed");
+
+    // Cancel all goals (NEEDED TO ISSUE NEW GOALS LATER)
+    ac_followperson->cancelAllGoals(); ros::Duration(0.1).sleep(); // wait 0.1 sec
+
+}
 
 
