@@ -10,7 +10,8 @@ source ~/.bashrc
 #naoqi python SDK download, installation and config
 cd $HOME_NAOQI
 mkdir lib && cd lib
-wget https://developer.softbankrobotics.com/Software/Python/2.5.5/Linux/pynaoqi-python2.7-2.5.5.5-linux64.tar.gz
+#wget https://developer.softbankrobotics.com/Software/Python/2.5.5/Linux/pynaoqi-python2.7-2.5.5.5-linux64.tar.gz
+wget https://lcas.lincoln.ac.uk/owncloud/index.php/s/1PLbRNtgklY6NCB/download -O pynaoqi-python2.7-2.5.5.5-linux64.tar.gz
 tar -xzvf pynaoqi-python2.7-2.5.5.5-linux64.tar.gz
 rm pynaoqi-python2.7-2.5.5.5-linux64.tar.gz
 
@@ -18,7 +19,8 @@ echo 'export PYTHONPATH=${PYTHONPATH}:$HOME_NAOQI/lib/pynaoqi-python2.7-2.5.5.5-
 
 #naoqi C++ SDK download, installation and config
 cd $HOME_NAOQI/lib
-wget https://developer.softbankrobotics.com/Software/C%2B%2B/2.5.5/Linux/naoqi-sdk-2.5.5.5-linux64.tar.gz
+#wget https://developer.softbankrobotics.com/Software/C%2B%2B/2.5.5/Linux/naoqi-sdk-2.5.5.5-linux64.tar.gz
+wget https://lcas.lincoln.ac.uk/owncloud/index.php/s/424z8mYr9TKX7J7/download -O naoqi-sdk-2.5.5.5-linux64.tar.gz
 tar -xzvf naoqi-sdk-2.5.5.5-linux64.tar.gz
 rm naoqi-sdk-2.5.5.5-linux64.tar.gz
 
