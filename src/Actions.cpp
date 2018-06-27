@@ -215,7 +215,6 @@ void RCHPNPActionServer::interact(string params, bool *run) {
   if (!*run)
       return;
 
-  
   vector<string> vparams;
   boost::replace_all(params, "000", "+");
   boost::split(vparams, params, boost::is_any_of("+")); // split parameters
@@ -285,11 +284,10 @@ void RCHPNPActionServer::say(string params, bool *run) {
 
 }
 
-
+#if 0
+// TODO debug
 void RCHPNPActionServer::ask(string params, bool *run) {
   cout << "### Executing Ask " << params << " ... " << endl;
-
-  // waitfor("personhere",run);
 
   string to_send = "ask_" + params;
   tcp_interface::RCOMMessage message_to_send;
@@ -317,7 +315,7 @@ void RCHPNPActionServer::answer(string params, bool *run) {
 
     cout << "### Executing Answer " << params << " ... " << endl;
 
-    string r = sendMODIM("im.display.answer()");
+    string r = sendMODIM("im.display.answer()"); // blocking - waiting for reply
     cout << "Answer: " << r << endl;
 
     vector<string> vparams;
@@ -335,13 +333,14 @@ void RCHPNPActionServer::answer(string params, bool *run) {
     out.data = ss.str();
     PNP_cond_pub.publish(out);
 
-    waitfor(params,run);
+    // waitfor(params,run);
 
     sendMODIM("im.display.remove_buttons()");
 
     cout << "### Answer " << params << ((*run)?" Completed":" Aborted") << endl;
 
 }
+#endif
 
 void RCHPNPActionServer::approach(string params, bool *run) {
 

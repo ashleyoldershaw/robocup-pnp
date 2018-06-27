@@ -22,7 +22,7 @@ $ roslaunch robocupathome_pnp rcathome_pnp.launch
 * Run a plan
 
 ```
-$ cd plans
+$ cd <demo_folder>/plans
 $ ./runplan.sh <robotname> <planname>
 ```
 

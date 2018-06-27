@@ -1,4 +1,5 @@
 *.bak
 *~
 plans/AUTOGEN*
+*.pnml
 
