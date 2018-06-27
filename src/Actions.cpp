@@ -284,10 +284,13 @@ void RCHPNPActionServer::say(string params, bool *run) {
 
 }
 
-#if 0
-// TODO debug
 void RCHPNPActionServer::ask(string params, bool *run) {
   cout << "### Executing Ask " << params << " ... " << endl;
+
+  cout << "TODO DEBUG!!!" << endl;
+	
+#if 0
+// TODO debug
 
   string to_send = "ask_" + params;
   tcp_interface::RCOMMessage message_to_send;
@@ -305,6 +308,7 @@ void RCHPNPActionServer::ask(string params, bool *run) {
   end_speech=false;
 
   sendMODIM_buttons(params);
+#endif
 
   cout << "### Ask " << params << ((*run)?" Completed":" Aborted") << endl;
 
@@ -314,6 +318,11 @@ void RCHPNPActionServer::ask(string params, bool *run) {
 void RCHPNPActionServer::answer(string params, bool *run) {
 
     cout << "### Executing Answer " << params << " ... " << endl;
+
+	cout << "TODO DEBUG!!!" << endl;
+	
+#if 0
+// TODO debug
 
     string r = sendMODIM("im.display.answer()"); // blocking - waiting for reply
     cout << "Answer: " << r << endl;
@@ -337,10 +346,11 @@ void RCHPNPActionServer::answer(string params, bool *run) {
 
     sendMODIM("im.display.remove_buttons()");
 
+#endif
+
     cout << "### Answer " << params << ((*run)?" Completed":" Aborted") << endl;
 
 }
-#endif
 
 void RCHPNPActionServer::approach(string params, bool *run) {
 
