@@ -139,6 +139,7 @@ string RCHPNPActionServer::sendMODIM(string modimstr) {
     tcpclient.send(" ###ooo###\n\r");
     
     int br = tcpclient.TCPClient::receive(buffer, 200);
+    // cout << "Buffer Received: [" << buffer << "]" << endl;    
     if (buffer[0]=='u' && buffer[1]=='\'') {
         buffer[0]=' '; buffer[1]=' '; buffer[br-2]='\0';
     }
@@ -150,6 +151,8 @@ string RCHPNPActionServer::sendMODIM(string modimstr) {
   }
 
   string r = string(buffer); boost::trim(r);
+  size_t p = r.find_first_of("\n\r\t");
+  r = r.substr(0,p);
   cout << "Received: [" << r << "]" << endl;    
   return r;
 
