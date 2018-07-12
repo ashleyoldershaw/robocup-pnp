@@ -16,24 +16,24 @@ using namespace std;
 // Peccioli@Home map
 
 void RCHPNPActionServer::initLocations() {
-	locationcoords["home"].set(8.5, 6.5);
-	locationcoords["entrance"].set(8.3, 7.0);
-	locationcoords["exit"].set(10.3, 5.0);
-	locationcoords["corridor1U"].set(6.5, 17.5);
-	locationcoords["corridor1D"].set(6.0, 8.0);
-	locationcoords["corridor2U"].set(8.0, 17.5);
-	locationcoords["bedroom"].set(3.0, 18.0);
-	locationcoords["bedroomout"].set(5.7, 17.5);
-	locationcoords["livingroom"].set(4.5, 3.5);
-	locationcoords["hall"].set(8.3, 7.0);
-	locationcoords["technicalroom"].set(3.0, 9.0);
-	locationcoords["kitchen"].set(8.0, 11.0);
-	locationcoords["kitchentable"].set(8.0, 12.5, 0);
-	locationcoords["fridge"].set(9.0, 14.5, 90);
+  locationcoords["home"].set(8.5, 6.5);
+  locationcoords["entrance"].set(8.3, 7.0);
+  locationcoords["exit"].set(10.3, 5.0);
+  locationcoords["corridor1U"].set(6.5, 17.5);
+  locationcoords["corridor1D"].set(6.0, 8.0);
+  locationcoords["corridor2U"].set(8.0, 17.5);
+  locationcoords["bedroom"].set(3.0, 18.0);
+  locationcoords["bedroomout"].set(5.7, 17.5);
+  locationcoords["livingroom"].set(4.5, 3.5);
+  locationcoords["hall"].set(8.3, 7.0);
+  locationcoords["technicalroom"].set(3.0, 9.0);
+  locationcoords["kitchen"].set(8.0, 11.0);
+  locationcoords["kitchentable"].set(8.0, 12.5, 0);
+  locationcoords["fridge"].set(9.0, 14.5, 90);
 }
 
 void RCHPNPActionServer::initDoors() {
-	doorcoords["maindoor"].set(8.3, 7.0, 10.3, 5.0);
+  doorcoords["maindoor"].set(8.3, 7.0, 10.3, 5.0);
 }
 
 
@@ -42,6 +42,49 @@ void RCHPNPActionServer::initDoors() {
  * ACTIONS
  */
 
+string recoveryplan = "";
+string recoveryactions = "";
+string actioninexecution = "";
+string failurecondition = "";
+
+void RCHPNPActionServer::rulebuilder(string params, bool *run) {
+  // this function is good because it doesn't use ROS at all, so it can be used on other stuff
+  string::size_type pos;
+  pos=params.find('_',0);
+  string command=params.substr(0,pos);
+  string other=params.substr(pos+1);
+
+  if (command == "addaction") {
+    actioninexecution = other;
+    ROS_INFO("Action chosen: \"%s\"", actioninexecution.c_str());
+  }
+  else if (command == "addcondition") {
+    failurecondition = other;
+  }
+  else if (command == "addrecoverystep") {
+    if (other == "fail") {
+      other = "fail_plan";
+    } else if (other == "restartaction") {
+      other = "restart_action";
+    } else if (other == "restartplan") {
+      other = "restart_plan";
+    } else if (other == "skip") {
+      other = "skip_action";
+    }
+    recoveryactions += other;
+    if (other == "restart_plan" || other == "restart_action"
+     || other == "skip_action" || other == "fail_plan" 
+     || other.substr(0,5) == "GOTO_") {
+      string recoveryplan = "*if* " + failurecondition + " *do* " + recoveryactions + " *confidence* 0.5" + '\n';
+      std_msgs::String msg;
+      msg.data = recoveryplan;
+      ROS_INFO("Recovery plan generated: \"%s\"", msg.data.c_str());
+      rulebuilder_pub.publish(msg);
+      recoveryactions = "";
+      ros::spinOnce();
+    } else recoveryactions += "; ";
+  }
+}
 
 
 void RCHPNPActionServer::goto_movebase(string params, bool *run) {
@@ -139,7 +182,6 @@ string RCHPNPActionServer::sendMODIM(string modimstr) {
     tcpclient.send(" ###ooo###\n\r");
     
     int br = tcpclient.TCPClient::receive(buffer, 200);
-    // cout << "Buffer Received: [" << buffer << "]" << endl;    
     if (buffer[0]=='u' && buffer[1]=='\'') {
         buffer[0]=' '; buffer[1]=' '; buffer[br-2]='\0';
     }
@@ -147,12 +189,10 @@ string RCHPNPActionServer::sendMODIM(string modimstr) {
         buffer[0]=' '; buffer[br-2]='\0';
     }
     
-	tcpclient.close();
+  tcpclient.close();
   }
 
   string r = string(buffer); boost::trim(r);
-  size_t p = r.find_first_of("\n\r\t");
-  r = r.substr(0,p);
   cout << "Received: [" << r << "]" << endl;    
   return r;
 
@@ -209,7 +249,7 @@ void RCHPNPActionServer::MODIM_init() {
 
 void RCHPNPActionServer::GUIinit(string params, bool *run) {
     MODIM_init();
-	wait("1",run);
+  wait("1",run);
 }
 
 void RCHPNPActionServer::interact(string params, bool *run) {
@@ -278,9 +318,9 @@ void RCHPNPActionServer::say(string params, bool *run) {
   end_speech=false;
 
   if (psim) {
-	std_msgs::String mess;
-	mess.data = params;
-	stage_say_pub.publish(mess);
+  std_msgs::String mess;
+  mess.data = params;
+  stage_say_pub.publish(mess);
   }
 
   cout << "### Say " << params << ((*run)?" Completed":" Aborted") << endl;
@@ -291,7 +331,7 @@ void RCHPNPActionServer::ask(string params, bool *run) {
   cout << "### Executing Ask " << params << " ... " << endl;
 
   cout << "TODO DEBUG!!!" << endl;
-	
+  
 #if 0
 // TODO debug
 
@@ -322,8 +362,8 @@ void RCHPNPActionServer::answer(string params, bool *run) {
 
     cout << "### Executing Answer " << params << " ... " << endl;
 
-	cout << "TODO DEBUG!!!" << endl;
-	
+  cout << "TODO DEBUG!!!" << endl;
+  
 #if 0
 // TODO debug
 

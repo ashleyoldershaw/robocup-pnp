@@ -39,6 +39,10 @@ RCHPNPActionServer::RCHPNPActionServer(ros::NodeHandle n) : PNPActionServer(), h
     register_action("sense",&RCHPNPActionServer::sense,this);
     register_action("GUIstart",&RCHPNPActionServer::GUIinit,this);
 
+	// rule builder action and publisher declaration
+    register_action("rulebuilder",&RCHPNPActionServer::rulebuilder,this);
+    rulebuilder_pub = handle.advertise<std_msgs::String>("/rulebuilder", 1000);
+
     handle.param("robot_name",robotname,string("diago"));
 
     listener = new tf::TransformListener();

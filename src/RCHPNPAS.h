@@ -55,7 +55,7 @@ class RCHPNPActionServer : public PNPActionServer
 {
 private:
     ros::NodeHandle handle, handlep;
-    ros::Publisher event_pub, plantoexec_pub, hri_pub, rcom_pub;
+    ros::Publisher event_pub, plantoexec_pub, hri_pub, rcom_pub, rulebuilder_pub;
     tf::TransformListener* listener;
 
     // action clients
@@ -123,6 +123,8 @@ public:
 	void approach(string params, bool *run);
 	void waitforloc(string params, bool *run);
 	void GUIinit(string params, bool *run);
+    // rule builder for the learning by demonstration
+    void rulebuilder(string params, bool *run);
 
 
 
