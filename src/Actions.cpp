@@ -49,6 +49,7 @@ string failurecondition = "";
 
 void RCHPNPActionServer::rulebuilder(string params, bool *run) {
   // this function is good because it doesn't use ROS at all, so it can be used on other stuff
+  // TODO add a way of naming the plan, i.e. if (command == "addname")
   string::size_type pos;
   pos=params.find('_',0);
   string command=params.substr(0,pos);
@@ -62,27 +63,17 @@ void RCHPNPActionServer::rulebuilder(string params, bool *run) {
     failurecondition = other;
   }
   else if (command == "addrecoverystep") {
-    if (other == "fail") {
-      other = "fail_plan";
-    } else if (other == "restartaction") {
-      other = "restart_action";
-    } else if (other == "restartplan") {
-      other = "restart_plan";
-    } else if (other == "skip") {
-      other = "skip_action";
-    }
     recoveryactions += other;
-    if (other == "restart_plan" || other == "restart_action"
-     || other == "skip_action" || other == "fail_plan" 
-     || other.substr(0,5) == "GOTO_") {
-      string recoveryplan = "*if* " + failurecondition + " *do* " + recoveryactions + " *confidence* 0.5" + '\n';
-      std_msgs::String msg;
-      msg.data = recoveryplan;
-      ROS_INFO("Recovery plan generated: \"%s\"", msg.data.c_str());
-      rulebuilder_pub.publish(msg);
-      recoveryactions = "";
-      ros::spinOnce();
-    } else recoveryactions += "; ";
+    recoveryactions += "; ";
+  }
+  else if (command == "nameplan") {
+    string recoveryplan = "*if* " + failurecondition + " *do* " + recoveryactions + " *confidence* 0.5" + '\n';
+    std_msgs::String msg;
+    msg.data = recoveryplan;
+    ROS_INFO("Recovery plan generated: \"%s\"", msg.data.c_str());
+    rulebuilder_pub.publish(msg);
+    recoveryactions = "";
+    ros::spinOnce();
   }
 }
 
@@ -193,6 +184,8 @@ string RCHPNPActionServer::sendMODIM(string modimstr) {
   }
 
   string r = string(buffer); boost::trim(r);
+  size_t p = r.find_first_of("\n\r\t");
+  r = r.substr(0,p);
   cout << "Received: [" << r << "]" << endl;    
   return r;
 
