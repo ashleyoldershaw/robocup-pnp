@@ -41,6 +41,16 @@ void RCHPNPActionServer::initDoors() {
 /*
  * ACTIONS
  */
+ 
+void RCHPNPActionServer::exec(string params, bool *run) {
+  string::size_type pos;
+  pos=params.find('_',0);
+  string command=params.substr(0,pos);
+  string other=params.substr(pos+1);
+  bool * booltrue;
+  *booltrue = true;
+  actionExecutionThread("diago_0", command, other, booltrue);
+}
 
 string recoveryplan = "";
 string recoveryactions = "";

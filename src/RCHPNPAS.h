@@ -125,6 +125,8 @@ public:
 	void GUIinit(string params, bool *run);
     // rule builder for the learning by demonstration
     void rulebuilder(string params, bool *run);
+    // for calling actions from within a plan
+    void exec(string params, bool *run);
 
 
 

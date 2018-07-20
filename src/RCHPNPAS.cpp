@@ -42,6 +42,8 @@ RCHPNPActionServer::RCHPNPActionServer(ros::NodeHandle n) : PNPActionServer(), h
 	// rule builder action and publisher declaration
     register_action("rulebuilder",&RCHPNPActionServer::rulebuilder,this);
     rulebuilder_pub = handle.advertise<std_msgs::String>("/rulebuilder", 1000);
+    // exec action for calling actions from within a plan
+    register_action("exec",&RCHPNPActionServer::exec,this);
 
     handle.param("robot_name",robotname,string("diago"));
 
