@@ -4,7 +4,7 @@
 sudo apt update
 sudo apt install ros-kinetic-naoqi-driver
 
-echo 'export HOME_NAOQI=/media/ubuntu/naoqi' >> ~/.bashrc
+echo 'export HOME_NAOQI=/opt/naoqi' >> ~/.bashrc
 source ~/.bashrc
 
 #naoqi python SDK download, installation and config

@@ -54,7 +54,6 @@ void RCHPNPActionServer::exec(string params, bool *run) {
 
 string recoveryplan = "";
 string recoveryactions = "";
-string actioninexecution = "";
 string failurecondition = "";
 
 void RCHPNPActionServer::rulebuilder(string params, bool *run) {
@@ -64,12 +63,7 @@ void RCHPNPActionServer::rulebuilder(string params, bool *run) {
   pos=params.find('_',0);
   string command=params.substr(0,pos);
   string other=params.substr(pos+1);
-
-  if (command == "addaction") {
-    actioninexecution = other;
-    ROS_INFO("Action chosen: \"%s\"", actioninexecution.c_str());
-  }
-  else if (command == "addcondition") {
+  if (command == "addcondition") {
     failurecondition = other;
   }
   else if (command == "addrecoverystep") {
@@ -77,7 +71,7 @@ void RCHPNPActionServer::rulebuilder(string params, bool *run) {
     recoveryactions += "; ";
   }
   else if (command == "nameplan") {
-    string recoveryplan = "*if* " + failurecondition + " *do* " + recoveryactions + " *confidence* 0.5" + '\n';
+    string recoveryplan = "*if* " + failurecondition + " *do* " + recoveryactions + '\n';
     std_msgs::String msg;
     msg.data = recoveryplan;
     ROS_INFO("Recovery plan generated: \"%s\"", msg.data.c_str());
