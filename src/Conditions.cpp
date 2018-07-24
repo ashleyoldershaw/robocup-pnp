@@ -73,12 +73,23 @@ void RCHPNPActionServer::tcpCallback(tcp_interface::RCOMMessage msg) {
     }
 }
 
+
+void RCHPNPActionServer::pepperSonarCB(sensor_msgs::Range msg) {
+    this->pepper_sonar_range = msg.range;
+    bool r = (this->pepper_sonar_range<1.0);
+    string param = PARAM_PNPCONDITIONBUFFER + string("obstaclehere"); 
+    handle.setParam(param, r?1:0);
+    // cout << "Sonar range: " << this->pepper_sonar_range << " -> obstaclehere: " << r << endl;
+}
+
 /*
 void RCHPNPActionServer::conditionCallback(std_msgs::String msg) {
     // ROS_INFO("Condition received: %s",msg.data.c_str());
     last_condition_received = msg.data;
 }
 */
+
+
 
 int RCHPNPActionServer::evalCondition(string cond) {
 

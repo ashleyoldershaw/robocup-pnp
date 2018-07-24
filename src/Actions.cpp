@@ -87,6 +87,30 @@ void RCHPNPActionServer::turn(string params, bool *run) {
 }
 
 
+void RCHPNPActionServer::setSpeed(string params, bool *run) {
+
+  cout << "### Executing Speed " << params << " ... " << endl;
+
+  vector<string> vparams;
+  boost::split(vparams, params, boost::is_any_of("_")); // split parameters
+
+  double lx=0; double az=0; double tm=0; bool stopend = true;
+
+  if (vparams.size()<3) {
+    cerr << "ERROR!!! speed action requires 3 parameters: lx, az, time" << endl;
+    return;
+  }
+  lx = atof(vparams[0].c_str());
+  az = atof(vparams[1].c_str());
+  tm = atof(vparams[2].c_str());
+
+  do_setSpeed(lx, az, tm, stopend, run);
+
+  cout << "### Speed " << params << ((*run)?" Completed":" Aborted") << endl;
+
+}
+
+
 
 void RCHPNPActionServer::followperson(string params, bool *run) {
 

@@ -17,4 +17,8 @@
 
 #define TOPIC_RCOMMESSAGE "/RCOMMessage"
 
+#define TOPIC_PEPPER_SONAR "/naoqi_driver/sonar/front"
+#define TOPIC_PEPPER_CMDVEL "/cmd_vel"
+
 #endif
+

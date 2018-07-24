@@ -3,6 +3,7 @@
 #include <tcp_interface/RCOMMessage.h>
 #include <boost/algorithm/string.hpp>
 #include <std_srvs/Empty.h>
+#include <geometry_msgs/Twist.h>
 
 #include "RCHPNPAS.h"
 #include "topics.h"
@@ -224,6 +225,32 @@ void RCHPNPActionServer::do_movebase(float GX, float GY, float GTh_DEG, bool *ru
 
 }
 
+
+void RCHPNPActionServer::do_setSpeed(double lx, double az, double tm, bool stopend, bool *run) {
+
+    if (!*run) return;
+
+    geometry_msgs::Twist cmd;
+    cmd.linear.x = 0; cmd.linear.y = 0; cmd.linear.z = 0;  
+    cmd.angular.x = 0; cmd.angular.y = 0; cmd.angular.z = 0;
+
+    double delay = 0.1; // sec
+    double cnt = 0.0; // time elapsed
+
+    cmd.linear.x = lx; cmd.angular.z = az;
+    while (*run && cnt<tm) {
+        cmd_vel_pub.publish(cmd);
+        cnt = cnt + delay;
+        ros::Duration(delay).sleep(); // wait ...  
+    }
+
+    if (stopend) {
+        cmd.linear.x = 0;
+        cmd.angular.z = 0;
+        cmd_vel_pub.publish(cmd);
+        ros::Duration(delay).sleep();
+    }
+}
 
 
 void RCHPNPActionServer::do_turn(string absrel_flag, float GTh_DEG, bool *run) {

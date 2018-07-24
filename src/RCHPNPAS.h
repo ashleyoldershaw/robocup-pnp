@@ -7,6 +7,7 @@
 #include <move_base_msgs/MoveBaseAction.h>
 #include <tf/transform_listener.h>
 #include <std_msgs/String.h>
+#include <sensor_msgs/Range.h>
 
 #include <pnp_ros/PNPActionServer.h>
 #include <rococo_navigation/TurnAction.h>
@@ -55,7 +56,7 @@ class RCHPNPActionServer : public PNPActionServer
 {
 private:
     ros::NodeHandle handle, handlep;
-    ros::Publisher event_pub, plantoexec_pub, hri_pub, rcom_pub;
+    ros::Publisher event_pub, plantoexec_pub, hri_pub, rcom_pub, cmd_vel_pub;
     tf::TransformListener* listener;
 
     // action clients
@@ -69,6 +70,7 @@ private:
     ros::Subscriber tcp_sub; // receiving data from tcp_interface
     ros::Subscriber cond_sub; // receiving data from PNP condition
     ros::Subscriber active_places_sub; // receiving labels of active places in PNP
+    ros::Subscriber peppersonar_sub; // Pepper sonar 
 
     ros::Publisher PNP_cond_pub, stage_say_pub;
     
@@ -79,6 +81,7 @@ private:
 
 	map<string, DoorCoords> doorcoords; // door coordinates
 	map<string, LocationCoords> locationcoords; // location coordinates
+    double pepper_sonar_range;
 
     TCPClient tcpclient; // TCP client for MODIM
 
@@ -108,6 +111,7 @@ public:
      * ACTIONS
      */
     void goto_movebase(string params, bool *run);
+    void setSpeed(string params, bool *run);
     void turn(string params, bool *run);
     void followperson(string params, bool *run);
     void enter(string params, bool *run);
@@ -131,6 +135,7 @@ public:
     void do_movebase(float GX, float GY, float GTh_DEG, bool *run);
     void do_turn(string absrel_flag, float GTh_DEG, bool *run);
     void do_followperson(float max_vel, bool *run);
+    void do_setSpeed(double lx, double az, double tm, bool stopend, bool *run);
 
     /*
      * CONDITIONS FUNCTIONS AND CALLBACKS
@@ -142,6 +147,7 @@ public:
     void laserobsmapCallback(laser_analysis::LaserObstacleMap msg);
     void tcpCallback(tcp_interface::RCOMMessage msg);
     void active_places_callback(const std_msgs::String::ConstPtr& msg);
+    void pepperSonarCB(sensor_msgs::Range msg);
     
 //    string last_condition_received;
     bool end_speech;
