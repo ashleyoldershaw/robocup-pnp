@@ -24,6 +24,7 @@ RCHPNPActionServer::RCHPNPActionServer(ros::NodeHandle n) : PNPActionServer(), h
 
 	// Actions implemented here
     register_action("goto",&RCHPNPActionServer::goto_movebase,this);
+    register_action("speed",&RCHPNPActionServer::setSpeed,this);
     register_action("turn",&RCHPNPActionServer::turn,this);
     register_action("followperson",&RCHPNPActionServer::followperson,this);
     register_action("enter",&RCHPNPActionServer::enter,this);
@@ -56,13 +57,16 @@ RCHPNPActionServer::RCHPNPActionServer(ros::NodeHandle n) : PNPActionServer(), h
     tcp_sub = handle.subscribe(TOPIC_RCOMMESSAGE, 10, &RCHPNPActionServer::tcpCallback, this);
     //cond_sub = handle.subscribe(TOPIC_PNPCONDITION, 10, &RCHPNPActionServer::conditionCallback, this);
     active_places_sub = handle.subscribe(TOPIC_PNPACTIVEPLACES, 10, &RCHPNPActionServer::active_places_callback, this);
+    peppersonar_sub = handle.subscribe(TOPIC_PEPPER_SONAR, 1, &RCHPNPActionServer::pepperSonarCB, this);
 	
     PNP_cond_pub = handle.advertise<std_msgs::String>(TOPIC_PNPCONDITION, 10);
 	stage_say_pub = handle.advertise<std_msgs::String>(TOPIC_STAGE_SAY, 10);
+    cmd_vel_pub = handle.advertise<geometry_msgs::Twist>(TOPIC_PEPPER_CMDVEL, 10);
 
     //last_condition_received="";
 
     targetGX=-999; targetGY=-999; targetGTh_deg=999;
+    pepper_sonar_range = 0.0;
 
 	initDoors();
 	initLocations();

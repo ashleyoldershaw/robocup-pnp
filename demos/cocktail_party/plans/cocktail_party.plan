@@ -4,7 +4,7 @@ goto_livingroom; ! *if* (and personhere (not closetotarget))  *do* say_hello; wa
 lookfor_person;
 < persondetected? goto_person:
   (not persondetected)? say_comehere >;
-waitfor_personhere;  ! *if* (timeout_waitfor_30) *do* goto_exit; fail_plan !
+waitfor_personhere;  ! *if* (timeout_waitfor_30) *do* goto_exit; fail_plan *confidence* 0.7 !
 LABEL_ASK;
 ask_which_drink_do_you_want;
 unknownvar_@X;
