@@ -219,7 +219,7 @@ void RCHPNPActionServer::MODIM_init() {
 
     char* demo_p = getenv ("DEMO_PATH");
     if (demo_p!=NULL) {
-       demo_path = std::string(demo_p);
+       std::string demo_path = std::string(demo_p);
        printf ("DEMO_PATH defined. Using %s", demo_path.c_str());
        sendMODIM("im.setPath('"+demo_path+"')");
     } 
