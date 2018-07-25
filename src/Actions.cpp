@@ -224,7 +224,7 @@ void RCHPNPActionServer::MODIM_init() {
        sendMODIM("im.setPath('"+demo_path+"')");
     } 
     else {
-       printf ("DEMO_PATH not defined. Using current local folder or webserver on port 8080");
+       printf ("DEMO_PATH not defined. Using current local folder or webserver\n");
     }
 
     sendMODIM_text("Welcome");
