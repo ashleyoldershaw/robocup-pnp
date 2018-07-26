@@ -253,17 +253,6 @@ void RCHPNPActionServer::MODIM_init() {
     sendMODIM("im.display.remove_buttons()");
     
     sendMODIM("im.setProfile(['*', '*', 'en', '*'])");
-
-    char* demo_p = getenv ("DEMO_PATH");
-    std::string demo_path = "/home/ubuntu/demos/cocktail_party_demo/";
-    if (demo_p!=NULL){
-       demo_path = std::string(demo_p);
-       printf ("DEMO_PATH defined. Using %s", demo_path.c_str());
-    } else
-       printf ("DEMO_PATH not defined. Using %s", demo_path.c_str());
-
-
-    sendMODIM("im.setPath('"+demo_path+"')");
     
     sendMODIM_text("Welcome");
 }
